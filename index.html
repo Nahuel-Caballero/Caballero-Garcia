@@ -4,29 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Café & Letras</title>
+
+    
     <!-- Vinculación de la hoja de estilos externa -->
     <link rel="stylesheet" href="style.css">
+        <!-- Vinculación del archivo de scripts -->
+    <script src="script.js"></script>
 </head>
 <body>
 
     <!-- Encabezado principal -->
     <header>
-        <h1>Café & Letrasdesadea</h1>
-        <p>Un espacio para inspirarte sorbo a sorbo</p>
+        <div>
+            <h1>Café & Letras</h1>
+            <p>Un espacio para inspirarte sorbo a sorbo</p>
+        </div>
+        <div>
+            <button id="btn-cambiar-tema">🌙 Cambiar Modo Claro/Oscuro</button>
+        </div>
     </header>
 
     <!-- Tarjeta Principal -->
     <main id="tarjeta">
-        <p id="texto-frase">"El secreto de ir adelante es comenzar."</p>
-        <p id="autor-frase">— Mark Twain</p>
-        
-        <div class="botones-contenedor">
-            <button id="btn-nueva-frase">🔄 Nueva Frase Inspiradora</button>
-            <button id="btn-cambiar-tema">🌙 Cambiar Modo Claro/Oscuro</button>
-        </div>
+        <section>
+            <p id="texto-frase">"El secreto de ir adelante es comenzar."</p>
+            <p id="autor-frase">— Mark Twain</p>
+            <div class="botones-contenedor">
+                <button id="btn-nueva-frase">🔄 Nueva Frase Inspiradora</button>
+            </div>
+        </section>
+        <section>
+            <h2>Recomendaciones del dia</h2>
+            <div>
+                <article>
+                    <strong>Cafe con Leche</strong>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam a ratione facilis!</p>
+                    <img src="" alt="cafe con leche">
+                </article>
+            </div>
+        </section>
     </main>
 
-    <!-- Vinculación del archivo de scripts -->
-    <script src="script.js"></script>
+    <footer>
+        <section>
+            <ul>
+                <li><strong>Direccion</strong><p>: Puerredon °12</p></li>
+                <li><strong>Telefono</strong><p>:1253485920 </p></li>
+                <li><strong>Email</strong><p>: cafeliterario@email.com</p></li>
+                <li><strong>Instagram</strong><p>: @cafeliterario</p></li>
+            </ul>
+        </section>
+        <section>
+            <ul>
+                <li><strong>Lunes a Viernes</strong><p>: 07:00hs a 12:00hs y 16:00hs a 20:00hs</p></li>
+                <li><strong>Sabado y Domingo</strong><p>: 07:00hs a 12:00hs</p></li>
+            </ul>
+        </section>
+    </footer>
+
+
 </body>
 </html>
