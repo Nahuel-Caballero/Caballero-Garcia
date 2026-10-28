@@ -1,24 +1,42 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
+<!--
+  ============================================================
+  Café & Letras - Página principal
+  ------------------------------------------------------------
+  Estructura:
+    1. <header>  : título, eslogan y botón de cambio de tema
+    2. <main>    : tarjeta de frases + recomendaciones + imagen final
+    3. <footer>  : datos de contacto y horarios
+  Dependencias: style.css (estilos) y script.js (comportamiento)
+  ============================================================
+-->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Café & Letras</title>
 
-    
     <!-- Vinculación de la hoja de estilos externa -->
     <link rel="stylesheet" href="style.css">
-        <!-- Vinculación del archivo de scripts -->
-    <script src="script.js"></script>
+
+    <!--
+      Vinculación del archivo de scripts.
+      "defer" hace que el script se ejecute recién cuando el HTML ya fue
+      parseado; sin esto, script.js correría antes de que existan los
+      botones (#btn-cambiar-tema, #btn-nueva-frase) y no los encontraría.
+    -->
+    <script src="script.js" defer></script>
 </head>
 <body>
 
-    <!-- Encabezado principal -->
+    <!-- Encabezado principal: identidad del sitio + control de tema -->
     <header>
+        <!-- Bloque de título y eslogan -->
         <div>
             <h1>Café & Letras</h1>
             <p>Un espacio para inspirarte sorbo a sorbo</p>
         </div>
+        <!-- Bloque del botón que alterna entre modo claro y oscuro (lo maneja script.js) -->
         <div>
             <button id="btn-cambiar-tema">🌙 Cambiar Modo Claro/Oscuro</button>
         </div>
@@ -33,19 +51,24 @@
                 <button id="btn-nueva-frase">🔄 Nueva Frase Inspiradora</button>
             </div>
         </section>
+
+        <!-- Sección de recomendaciones: una <article> por cada bebida -->
         <section>
             <h2>Recomendaciones del día</h2>
             <div class="recomendaciones">
+                <!-- Recomendación 1: Latte Art -->
                 <article>
                     <strong>Latte Art</strong>
                     <p>Capuchino preparado con leche granito de vaca y una textura cremosa del latte con diseño de crema.</p>
                     <img src="https://images.unsplash.com/photo-1571091718767-18e3e571506e?auto=format&fit=crop&w=600&q=80" alt="Taza de latte art con diseño de leche">
                 </article>
+                <!-- Recomendación 2: Café Solo -->
                 <article>
                     <strong>Café Solo</strong>
                     <p>Café especial tostado y molido en un momento, aroma intenso y sabor balanceado sin aditivos.</p>
                     <img src="https://images.unsplash.com/photo-1541167760496-1d01a7f91ee3?auto=format&fit=crop&w=600&q=80" alt="Café solo en taza de porcelana con sopa de óvalo">
                 </article>
+                <!-- Recomendación 3: Café con Leche -->
                 <article>
                     <strong>Café con Leche</strong>
                     <p>Bebida reconfortante hecha con una taza de café y leche vaporizada, ideal para un momento tranquilo.</p>
@@ -54,26 +77,38 @@
             </div>
         </section>
 
+        <!-- Imagen de despedida (pendiente: falta completar el atributo src) -->
         <section>
             <img src="" alt="despedida">
         </section>
     </main>
 
+    <!--
+      Pie de página: cuadrícula de dos columnas (contacto | horarios)
+      más una fila inferior con el aviso de derechos.
+      Cada <li> usa <strong> para la etiqueta y <span> para el valor.
+    -->
     <footer>
+        <!-- Columna 1: datos de contacto -->
         <section>
+            <h3>Contacto</h3>
             <ul>
-                <li><strong>Direccion</strong><p>: Av. de los Insurgentes Sur 1235, Cuauhtémoc, Ciudad de México</p></li>
-                <li><strong>Telefono</strong><p>: +52 55 1234 5678</p></li>
-                <li><strong>Email</strong><p>: info@cafes-letras.com</p></li>
-                <li><strong>Instagram</strong><p>: @cafes_letras</p></li>
+                <li><strong>Dirección:</strong><span>Av. de los Insurgentes Sur 1235, Cuauhtémoc, Ciudad de México</span></li>
+                <li><strong>Teléfono:</strong><span>+52 55 1234 5678</span></li>
+                <li><strong>Email:</strong><span>info@cafes-letras.com</span></li>
+                <li><strong>Instagram:</strong><span>@cafes_letras</span></li>
             </ul>
         </section>
+        <!-- Columna 2: horarios de atención -->
         <section>
+            <h3>Horarios</h3>
             <ul>
-                <li><strong>Lunes a Viernes</strong><p>: 08:00hs a 21:00hs</p></li>
-                <li><strong>Sabado y Domingo</strong><p>: 09:00hs a 21:00hs</p></li>
+                <li><strong>Lunes a Viernes:</strong><span>08:00hs a 21:00hs</span></li>
+                <li><strong>Sábado y Domingo:</strong><span>09:00hs a 21:00hs</span></li>
             </ul>
         </section>
+        <!-- Fila inferior: ocupa ambas columnas -->
+        <p class="footer-legal">© 2026 Café &amp; Letras. Un espacio para inspirarte sorbo a sorbo.</p>
     </footer>
 
 

@@ -1,20 +1,54 @@
-﻿:root {
-  /* Tono papel/cerÃ¡mica cÃ¡lido */
+﻿/**
+ * ============================================================
+ * Café & Letras - Hoja de estilos principal
+ * ------------------------------------------------------------
+ * Índice:
+ *   1. Variables de tema (claro / oscuro)
+ *   2. Fuentes y reset
+ *   3. Base: body, header, botones genéricos
+ *   4. Tarjeta principal (#tarjeta)
+ *   5. Recomendaciones (carrusel de artículos)
+ *   6. Botón de cobre "Nueva frase inspiradora"
+ *   7. Media queries (responsive)
+ *   8. Footer
+ * ============================================================
+ */
+
+/* ------------------------------------------------------------
+ * 1. VARIABLES DE TEMA
+ * Los valores por defecto corresponden al modo claro.
+ * ------------------------------------------------------------ */
+:root {
+  /* Tono papel/cerámica cálido */
   --bg: #f7f3ec;
   --surface: #ffffff;
   --surface-alt: #f0e9df;
   --text: #35271f;
   --text-muted: #6f5f50;
   --accent: #8a5a2b;
+
+  /* Paleta de cobre para el botón de inspiración */
+  --copper-border: #b8860b;
+  --copper-deep: #8a5a2b;
+  --copper-base: #c9a26b;
+  --copper-highlight: #e8c98a;
+  --copper-dark: #4a2f18;
+  --copper-shadow: #5c3f1f;
   --accent-soft: #c9a26b;
   --border: #e4dccf;
   --shadow: 0 8px 22px rgba(90, 65, 45, 0.07);
   --shadow-hover: 0 14px 32px rgba(90, 65, 45, 0.12);
+  --header-bg: rgba(53, 39, 31, 0.07);       /* velo marrón sutil sobre el fondo */
   --radius: 20px;
   --serif: Georgia, "Times New Roman", serif;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
+/*
+ * Modo oscuro: se activa cuando <html> tiene data-theme="dark"
+ * (el atributo lo coloca script.js al pulsar #btn-cambiar-tema).
+ * Solo se redefinen las variables; el resto de reglas se adapta solo.
+ */
 html[data-theme="dark"] {
   --bg: #1d1812;
   --surface: #2a2119;
@@ -26,37 +60,74 @@ html[data-theme="dark"] {
   --border: #3c3025;
   --shadow: 0 10px 26px rgba(0, 0, 0, 0.25);
   --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.32);
+  --header-bg: rgba(0, 0, 0, 0.22);          /* velo negro: oscurece el fondo ya oscuro */
+
+  /*
+   * Cobre en modo oscuro (estos valores estaban sueltos, fuera de
+   * cualquier regla, por lo que el navegador los ignoraba).
+   * Se omitió --copper-dark (#f1e9dc): como color de texto sobre el
+   * degradado claro del botón no tendría contraste suficiente.
+   */
+  --copper-border: #b8860b;
+  --copper-deep: #d4a46a;
+  --copper-base: #e6c99b;
+  --copper-highlight: #f5d7a8;
+  --copper-shadow: #3c3025;
 }
 
+/* ------------------------------------------------------------
+ * 2. FUENTES Y RESET
+ * ------------------------------------------------------------ */
+
+/* Fuente tipo pizarra, usada en los textos de la tarjeta */
 @font-face {
   font-family: "Pizarra";
   src: url(fonts/Cheveuxdange.ttf);
 }
 
+/* Reset: elimina márgenes/rellenos por defecto y usa border-box
+   para que padding y borde cuenten dentro del ancho declarado */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Desplazamiento suave al navegar por anclas */
 html {
   scroll-behavior: smooth;
 }
 
+/* ------------------------------------------------------------
+ * 3. BASE
+ * ------------------------------------------------------------ */
+
+/* body es un contenedor flex vertical de al menos la altura de la
+   ventana, para que el footer quede abajo en páginas cortas.
+   No lleva padding: así header y footer tocan los bordes de la ventana.
+   El espaciado del contenido se aplica a <main> (ver más abajo). */
 body {
   font-family: Georgia, "Times New Roman", serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  padding: 28px 18px 64px;
+  padding: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+/* Encabezado: título a la izquierda y botón de tema a la derecha;
+   con flex-wrap pasa a apilarse en pantallas angostas.
+   El fondo (--header-bg) es un velo semitransparente, por lo que
+   oscurece ligeramente el color de página en ambos temas; el padding
+   y el radio hacen que se vea como una barra y no como una mancha. */
 header {
-  max-width: 1080px;
-  margin: 0 auto 36px;
+  width: 100%;                                /* ocupa todo el ancho de la ventana */
+  margin: 0;                                  /* sin separación con los bordes */
+  padding: 18px 24px;                         /* aire interno para el texto */
+  background: var(--header-bg);
+  border-radius: 0;                           /* esquinas rectas al tocar los bordes */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -76,6 +147,7 @@ header p {
   font-style: italic;
 }
 
+/* Estilo base de todos los botones (forma de píldora) */
 button {
   font-family: inherit;
   cursor: pointer;
@@ -92,9 +164,14 @@ button:hover {
   border-color: var(--accent);
 }
 
+/* Efecto de "hundimiento" al presionar */
 button:active {
   transform: translateY(1px);
 }
+
+/* ------------------------------------------------------------
+ * 4. TARJETA PRINCIPAL (sin modificar)
+ * ------------------------------------------------------------ */
 
 /* Tarjeta principal - pizarra oscura con marco de madera */
 #tarjeta::before {
@@ -138,4 +215,268 @@ button:active {
 #tarjeta > * {
   position: relative;
   z-index: 1;
+}
+
+/* ------------------------------------------------------------
+ * 5. RECOMENDACIONES
+ * ------------------------------------------------------------ */
+
+/* Contenedor de las recomendaciones, con scroll propio si el
+   contenido se desborda */
+.recomendaciones {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 16px 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;          /* inercia en iOS */
+  scrollbar-width: thin;                       /* Firefox */
+  scrollbar-color: var(--accent-soft) transparent;
+  overscroll-behavior-x: contain;              /* evita arrastrar la página al llegar al borde */
+}
+
+/* Barra de desplazamiento personalizada (Chrome, Edge, Safari) */
+.recomendaciones::-webkit-scrollbar {
+  height: 10px;
+}
+
+.recomendaciones::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.recomendaciones::-webkit-scrollbar-thumb {
+  background: var(--accent-soft);
+  border-radius: 999px;
+}
+
+.recomendaciones::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Cada artículo ocupa un tercio del ancho (menos el espacio del gap)
+   y se alinea al inicio al hacer scroll-snap */
+.recomendaciones article {
+  flex: 0 0 calc(100% / 3 - 32px);
+  min-width: 0;                                /* permite que el contenido se encoja */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  scroll-snap-align: start;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Al pasar el mouse la tarjeta se eleva levemente */
+.recomendaciones article:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.recomendaciones article strong {
+  font-size: 1.35rem;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+}
+
+.recomendaciones article p {
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* La imagen llena el ancho del artículo manteniendo bordes
+   redondeados un poco menores que los de la tarjeta */
+.recomendaciones article img {
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--radius) - 6px);
+  object-fit: cover;
+  display: block;
+}   /* <- llave de cierre que faltaba: absorbía las reglas del botón */
+
+/* ------------------------------------------------------------
+ * 6. BOTÓN DE COBRE "Nueva frase inspiradora"
+ * ------------------------------------------------------------ */
+
+/*
+ * Contenedor del botón: queda centrado sobre el borde de madera
+ * inferior de la tarjeta (que tiene position: relative).
+ *
+ * Cómo funciona el cálculo:
+ *  - `bottom` se mide desde el borde interno de la tarjeta, donde
+ *    empieza el marco de madera. El marco mide 14px, así que
+ *    bottom: -7px coloca el borde inferior del contenedor justo en
+ *    la mitad del marco.
+ *  - translate(-50%, 50%) centra en horizontal y baja el contenedor
+ *    la mitad de su propia altura; así el centro del botón coincide
+ *    con la línea media del marco, sin importar cuánto mida el botón.
+ *  - z-index asegura que el botón se dibuje por encima del marco.
+ */
+#tarjeta .botones-contenedor {
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  transform: translate(-50%, 50%);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: auto;
+  pointer-events: auto;
+}
+
+/* El botón sobresale por debajo de la tarjeta, así que se agrega
+   separación hacia la sección siguiente para que no se solape
+   (se aplica a la sección vecina, sin tocar #tarjeta) */
+#tarjeta + section {
+  margin-top: 56px;
+}
+
+/* Estilo placa de cobre compacta: color plano (sin degradado) y sombra
+   "sólida" inferior que simula grosor (el 1er valor de box-shadow) */
+#btn-nueva-frase {
+  font-family: inherit;
+  cursor: pointer;
+  border: 2px solid var(--copper-border);
+  background: var(--copper-base);             /* color plano */
+  color: var(--copper-dark);
+  padding: 8px 18px;                          /* antes 14px 28px */
+  border-radius: 999px;
+  font-size: 0.85rem;                         /* antes 1rem */
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  box-shadow:
+    0 3px 0 var(--copper-shadow),             /* "grosor" de la placa */
+    0 5px 10px rgba(90, 65, 45, 0.25);        /* sombra difusa */
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover: el botón sube, el "grosor" aumenta y el color se aclara a
+   --copper-highlight (también anula el hover genérico de `button`) */
+#btn-nueva-frase:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 0 var(--copper-shadow),
+    0 8px 14px rgba(90, 65, 45, 0.3);
+  background: var(--copper-highlight);
+  border-color: var(--copper-border);
+}
+
+/* Active: el botón se hunde y el "grosor" se reduce */
+#btn-nueva-frase:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 1px 0 var(--copper-shadow),
+    0 2px 6px rgba(90, 65, 45, 0.25);
+}
+
+/* Si el texto del botón se envuelve en <span>, queda por encima del brillo */
+#btn-nueva-frase span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------
+ * 7. MEDIA QUERIES
+ * ------------------------------------------------------------ */
+
+/* Tablets: dos artículos por fila */
+@media (max-width: 820px) {
+  .recomendaciones {
+    padding: 12px 2px;
+  }
+
+  .recomendaciones article {
+    flex-basis: calc(100% / 2 - 24px);
+    padding: 16px;
+  }
+}
+
+/* Móviles: un artículo por fila */
+@media (max-width: 480px) {
+  .recomendaciones {
+    padding: 8px 0;
+  }
+
+  .recomendaciones article {
+    flex-basis: 100%;
+    padding: 14px;
+  }
+}
+
+/* ------------------------------------------------------------
+ * 8. FOOTER
+ * ------------------------------------------------------------ */
+
+/*
+ * Pie de página: tarjeta oscura con bordes redondeados, alineada con
+ * el ancho de la tarjeta principal (1040px). Usa CSS Grid con dos
+ * columnas (contacto | horarios) y una fila inferior para el copyright.
+ * `margin-top: auto` lo empuja al fondo cuando la página es corta,
+ * aprovechando que <body> es un contenedor flex vertical.
+ */
+footer {
+  width: 100%;                                /* ocupa todo el ancho de la ventana */
+  margin: auto 0 0;                           /* sin márgenes laterales; auto arriba lo empuja al fondo */
+  padding: 40px 48px 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 48px;
+  background-color: #1a1525;
+  color: #f0e9df;
+  border-top: 4px solid var(--accent-soft);   /* línea de acento color cobre */
+  border-radius: 0;                           /* esquinas rectas al tocar los bordes */
+  box-shadow: var(--shadow);
+}
+
+/* <main> aporta el espaciado lateral y vertical del contenido (el body
+   ya no lo tiene), de modo que header y footer queden a ras de ventana */
+main {
+  padding: 36px 18px 64px;
+}
+
+/* Título de cada columna */
+footer h3 {
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+/* Listas sin viñetas; cada <li> separado del siguiente */
+footer ul {
+  list-style: none;
+}
+
+footer li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* Etiqueta ("Teléfono:", "Email:"...) resaltada; el valor va en <span> */
+footer li strong {
+  margin-right: 6px;
+  color: var(--accent-soft);
+}
+
+/* Fila inferior: ocupa las dos columnas y se separa con una línea fina */
+footer .footer-legal {
+  grid-column: 1 / -1;
+  padding-top: 18px;
+  border-top: 1px solid rgba(240, 233, 223, 0.18);
+  text-align: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+/* Móviles: las columnas se apilan en una sola */
+@media (max-width: 600px) {
+  footer {
+    grid-template-columns: 1fr;
+    padding: 28px 24px 20px;
+  }
 }
