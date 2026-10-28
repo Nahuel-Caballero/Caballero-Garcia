@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <!--
   ============================================================
   Café & Letras - Página principal
   ------------------------------------------------------------
   Estructura:
     1. <header>  : título, eslogan y botón de cambio de tema
-    2. <main>    : tarjeta de frases + recomendaciones + imagen final
+    2. <main>    : tarjeta de frases + carrusel de recomendaciones + imagen final
     3. <footer>  : datos de contacto y horarios
   Dependencias: style.css (estilos) y script.js (comportamiento)
   ============================================================
@@ -38,7 +38,7 @@
         </div>
         <!-- Bloque del botón que alterna entre modo claro y oscuro (lo maneja script.js) -->
         <div>
-            <button id="btn-cambiar-tema">🌙 Cambiar Modo Claro/Oscuro</button>
+            <button id="btn-cambiar-tema">Modo Oscuro</button>
         </div>
     </header>
 
@@ -48,38 +48,64 @@
             <p id="texto-frase">"El secreto de ir adelante es comenzar."</p>
             <p id="autor-frase">— Mark Twain</p>
             <div class="botones-contenedor">
-                <button id="btn-nueva-frase">🔄 Nueva Frase Inspiradora</button>
+                <button id="btn-nueva-frase">Nueva Frase Inspiradora</button>
             </div>
         </section>
 
-        <!-- Sección de recomendaciones: una <article> por cada bebida -->
-        <section>
+        <!--
+          Sección de recomendaciones: ahora es un CARRUSEL.
+          - .carrusel agrupa las flechas (< y >) y la ventana visible.
+          - .carrusel-viewport recorta y deja ver solo una tarjeta.
+          - #recomendaciones es la pista que se desplaza con transform.
+          - #puntos se rellena desde script.js (uno por tarjeta).
+        -->
+        <section class="seccion-recomendaciones">
             <h2>Recomendaciones del día</h2>
-            <div class="recomendaciones">
-                <!-- Recomendación 1: Latte Art -->
-                <article>
-                    <strong>Latte Art</strong>
-                    <p>Capuchino preparado con leche granito de vaca y una textura cremosa del latte con diseño de crema.</p>
-                    <img src="https://images.unsplash.com/photo-1571091718767-18e3e571506e?auto=format&fit=crop&w=600&q=80" alt="Taza de latte art con diseño de leche">
-                </article>
-                <!-- Recomendación 2: Café Solo -->
-                <article>
-                    <strong>Café Solo</strong>
-                    <p>Café especial tostado y molido en un momento, aroma intenso y sabor balanceado sin aditivos.</p>
-                    <img src="https://images.unsplash.com/photo-1541167760496-1d01a7f91ee3?auto=format&fit=crop&w=600&q=80" alt="Café solo en taza de porcelana con sopa de óvalo">
-                </article>
-                <!-- Recomendación 3: Café con Leche -->
-                <article>
-                    <strong>Café con Leche</strong>
-                    <p>Bebida reconfortante hecha con una taza de café y leche vaporizada, ideal para un momento tranquilo.</p>
-                    <img src="https://images.unsplash.com/photo-1578012885537-436f894c7829?auto=format&fit=crop&w=600&q=80" alt="Café con leche en taza norteña">
-                </article>
+
+            <div class="carrusel">
+                <!-- Flecha anterior -->
+                <button id="btn-anterior" class="carrusel-btn" type="button"
+                        aria-label="Recomendación anterior">&#10094;</button>
+
+                <!-- Ventana del carrusel -->
+                <div class="carrusel-viewport">
+                    <div class="recomendaciones" id="recomendaciones">
+
+                        <!-- Recomendación 1: Latte Art -->
+                        <article>
+                            <strong>Latte Art</strong>
+                            <p>Capuchino preparado con leche granito de vaca y una textura cremosa del latte con diseño de crema.</p>
+                            <img src="img/recom/late-art.jpg" alt="Latte art con diseño de crema">
+                        </article>
+
+                        <!-- Recomendación 2: Café Solo -->
+                        <article>
+                            <strong>Café Solo</strong>
+                            <p>Café especial tostado y molido en un momento, aroma intenso y sabor balanceado sin aditivos.</p>
+                            <img src="img/recom/cafe-solo.jpg" alt="Café solo en taza de porcelana con sopa de óvalo">
+                        </article>
+
+                        <!-- Recomendación 3: Café con Leche -->
+                        <article>
+                            <strong>Café con Leche</strong>
+                            <p>Bebida reconfortante hecha con una taza de café y leche vaporizada, ideal para un momento tranquilo.</p>
+                            <img src="img/recom/caje-leche.jpg" alt="Café con leche en taza norteña">
+                        </article>
+
+                    </div>
+                </div>
+
+                <!-- Flecha siguiente -->
+                <button id="btn-siguiente" class="carrusel-btn" type="button"
+                        aria-label="Recomendación siguiente">&#10095;</button>
             </div>
+
+            <!-- Puntos indicadores (se generan por JS) -->
+            <div class="carrusel-puntos" id="puntos" aria-label="Selector de recomendaciones"></div>
         </section>
 
         <!-- Imagen de despedida (pendiente: falta completar el atributo src) -->
         <section>
-            <img src="" alt="despedida">
         </section>
     </main>
 
@@ -110,7 +136,6 @@
         <!-- Fila inferior: ocupa ambas columnas -->
         <p class="footer-legal">© 2026 Café &amp; Letras. Un espacio para inspirarte sorbo a sorbo.</p>
     </footer>
-
 
 </body>
 </html>

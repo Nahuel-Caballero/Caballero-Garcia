@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  * ============================================================
  * Café & Letras - Hoja de estilos principal
  * ------------------------------------------------------------
@@ -204,12 +204,22 @@ button:active {
   border: 14px solid;
   border-image: url(img/msg/wood-grain-texture-a-natural.jpeg) 40 stretch;
   border-radius: 6px;
-
 }
 
 #tarjeta > p {
   font-family: "Pizarra";
+}
 
+/* Frase principal de la tarjeta: se agranda el tamaño */
+#texto-frase {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  line-height: 1.4;
+}
+
+/* Autor: también más grande que antes, pero menor que la frase */
+#autor-frase {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  line-height: 1.4;
 }
 
 #tarjeta > * {
@@ -218,46 +228,53 @@ button:active {
 }
 
 /* ------------------------------------------------------------
- * 5. RECOMENDACIONES
+ * 5. RECOMENDACIONES (carrusel de tarjetas)
  * ------------------------------------------------------------ */
 
-/* Contenedor de las recomendaciones, con scroll propio si el
-   contenido se desborda */
-.recomendaciones {
+/* Sección que contiene el título, el carrusel y los puntos.
+   Se apila en columna y centra el contenido. */
+.seccion-recomendaciones {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  padding: 16px 4px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;          /* inercia en iOS */
-  scrollbar-width: thin;                       /* Firefox */
-  scrollbar-color: var(--accent-soft) transparent;
-  overscroll-behavior-x: contain;              /* evita arrastrar la página al llegar al borde */
+  align-items: center;
+  gap: 20px;
 }
 
-/* Barra de desplazamiento personalizada (Chrome, Edge, Safari) */
-.recomendaciones::-webkit-scrollbar {
-  height: 10px;
+.seccion-recomendaciones h2 {
+  text-align: center;
 }
 
-.recomendaciones::-webkit-scrollbar-track {
-  background: transparent;
+/* Envoltorio: flecha <, ventana y flecha > */
+.carrusel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;                          /* ancho de la tarjeta visible */
+  margin: 0 auto;
 }
 
-.recomendaciones::-webkit-scrollbar-thumb {
-  background: var(--accent-soft);
-  border-radius: 999px;
+/* Ventana del carrusel: recorta lo que no sea la tarjeta activa */
+.carrusel-viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  padding: 16px 0;
 }
 
-.recomendaciones::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+/* Pista de tarjetas: se desplaza con transform (lo maneja script.js) */
+.recomendaciones {
+  display: flex;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
-/* Cada artículo ocupa un tercio del ancho (menos el espacio del gap)
-   y se alinea al inicio al hacer scroll-snap */
+/* Cada artículo es una tarjeta que ocupa el 100% de la ventana,
+   así se ve una sola a la vez */
 .recomendaciones article {
-  flex: 0 0 calc(100% / 3 - 32px);
-  min-width: 0;                                /* permite que el contenido se encoja */
+  flex: 0 0 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -266,7 +283,6 @@ button:active {
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow);
-  scroll-snap-align: start;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -287,15 +303,62 @@ button:active {
   line-height: 1.7;
 }
 
-/* La imagen llena el ancho del artículo manteniendo bordes
-   redondeados un poco menores que los de la tarjeta */
+/* La imagen se muestra CUADRADA con object-fit para no deformarla */
 .recomendaciones article img {
   width: 100%;
+  aspect-ratio: 1 / 1;
   height: auto;
   border-radius: calc(var(--radius) - 6px);
   object-fit: cover;
   display: block;
-}   /* <- llave de cierre que faltaba: absorbía las reglas del botón */
+}
+
+/* Flechas laterales (< y >) */
+.carrusel-btn {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  line-height: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.carrusel-btn:hover {
+  background: var(--accent);
+  color: var(--surface);
+  border-color: var(--accent);
+}
+
+/* Puntos indicadores */
+.carrusel-puntos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.punto {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  background: transparent;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.punto.activo {
+  background: var(--accent);
+  transform: scale(1.3);
+}
 
 /* ------------------------------------------------------------
  * 6. BOTÓN DE COBRE "Nueva frase inspiradora"
@@ -382,26 +445,31 @@ button:active {
  * 7. MEDIA QUERIES
  * ------------------------------------------------------------ */
 
-/* Tablets: dos artículos por fila */
+/* Tablets: carrusel algo más angosto */
 @media (max-width: 820px) {
-  .recomendaciones {
-    padding: 12px 2px;
-  }
-
-  .recomendaciones article {
-    flex-basis: calc(100% / 2 - 24px);
-    padding: 16px;
+  .carrusel {
+    max-width: 440px;
   }
 }
 
-/* Móviles: un artículo por fila */
+/* Móviles: flechas más pequeñas y tarjeta a lo ancho */
 @media (max-width: 480px) {
-  .recomendaciones {
-    padding: 8px 0;
+  .carrusel {
+    max-width: 100%;
+    gap: 6px;
+  }
+
+  .carrusel-viewport {
+    padding: 10px 0;
+  }
+
+  .carrusel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
   }
 
   .recomendaciones article {
-    flex-basis: 100%;
     padding: 14px;
   }
 }
