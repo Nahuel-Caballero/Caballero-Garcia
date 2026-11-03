@@ -548,3 +548,36 @@ footer .footer-legal {
     padding: 28px 24px 20px;
   }
 }
+/* ==========================================
+   ESTILOS PARA MODO OSCURO
+   ========================================== */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Fondos para el encabezado, tarjetas y secciones */
+body.dark-mode header,
+body.dark-mode main,
+body.dark-mode section,
+body.dark-mode article,
+body.dark-mode div {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+/* Ajustes de texto e íconos en modo oscuro */
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode p,
+body.dark-mode span {
+    color: #f1f1f1 !important;
+}
+
+/* Botones en modo oscuro */
+body.dark-mode button {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    border: 1px solid #555555 !important;
+}
