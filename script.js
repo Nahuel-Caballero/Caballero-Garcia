@@ -78,23 +78,54 @@
   irA(0);
   iniciar();
 })();
-const themeBtn = document.getElementById('btn-cambiar-tema');
+document.addEventListener('DOMContentLoaded', () => {
 
-if (localStorage.getItem('theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-    if (themeBtn) themeBtn.textContent = 'Modo Claro';
-}
-
-if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-
-        if (document.body.classList.contains('dark-mode')) {
-            themeBtn.textContent = 'Modo Claro';
-            localStorage.setItem('theme', 'dark');
-        } else {
-            themeBtn.textContent = 'Modo Oscuro';
-            localStorage.setItem('theme', 'light');
+    // 1. Array de Objetos con 5 frases literarias y sus respectivos autores
+    const frases = [
+        {
+            texto: '"El secreto de ir adelante es comenzar."',
+            autor: '— Mark Twain'
+        },
+        {
+            texto: '"No hay medicina que cure lo que no cura la felicidad."',
+            autor: '— Gabriel García Márquez'
+        },
+        {
+            texto: '"Caminante, no hay camino, se hace camino al andar."',
+            autor: '— Antonio Machado'
+        },
+        {
+            texto: '"No todo lo que es de oro reluce, ni toda la gente errante está perdida."',
+            autor: '— J.R.R. Tolkien'
+        },
+        {
+            texto: '"Estar solo no tiene nada de malo, pero estar con alguien que te haga sentir solo es lo peor."',
+            autor: '— Robin Williams'
         }
-    });
-}
+    ];
+
+    // 2. Capturar los elementos del DOM utilizando document.getElementById()
+    const textoFrase = document.getElementById('texto-frase');
+    const autorFrase = document.getElementById('autor-frase');
+    const btnNuevaFrase = document.getElementById('btn-nueva-frase');
+    const btnModoOscuro = document.getElementById('btn-cambiar-tema');
+
+    // 3. Evento click del botón "Nueva Frase" con selección aleatoria usando Math.random()
+    if (btnNuevaFrase && textoFrase && autorFrase) {
+        btnNuevaFrase.addEventListener('click', () => {
+            const indiceAleatorio = Math.floor(Math.random() * frases.length);
+            const fraseSeleccionada = frases[indiceAleatorio];
+
+            textoFrase.textContent = fraseSeleccionada.texto;
+            autorFrase.textContent = fraseSeleccionada.autor;
+        });
+    }
+
+    // 4. Evento click del botón "Modo Oscuro" alternando la clase .modooscuro en el body
+    if (btnModoOscuro) {
+        btnModoOscuro.addEventListener('click', () => {
+            document.body.classList.toggle('modooscuro');
+        });
+    }
+
+});
