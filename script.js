@@ -78,3 +78,23 @@
   irA(0);
   iniciar();
 })();
+const themeBtn = document.getElementById('btn-cambiar-tema');
+
+if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-mode');
+    if (themeBtn) themeBtn.textContent = 'Modo Claro';
+}
+
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+
+        if (document.body.classList.contains('dark-mode')) {
+            themeBtn.textContent = 'Modo Claro';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            themeBtn.textContent = 'Modo Oscuro';
+            localStorage.setItem('theme', 'light');
+        }
+    });
+}
